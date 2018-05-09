@@ -21,12 +21,31 @@ def repartir_fichas():
     return mano1,mano2,mano3,mano4
 mano1,mano2,mano3,mano4=repartir_fichas()
 player1=jugador.Jugador("Jose","Norte",mano1)
-player2=jugador.Jugador("Laura","Sur",mano2)
-player3=jugador.Jugador("Fernando","Este",mano3)
+player2=jugador.Jugador("Laura","Este",mano2)
+player3=jugador.Jugador("Fernando","Sur",mano3)
 player4=jugador.Jugador("Katherine","Oeste",mano4)
 
-equipo1 = equipo.Equipo(player1,player2)
-equipo2 = equipo.Equipo(player3,player4)
+def repartir_equipos(player1,player2,player3,player4):
+    jugadores=[player1,player2,player3,player4]
+    for element in jugadores:
+        if element.posicion == "Norte":
+            for each in jugadores:
+                if each.posicion == "Sur":
+                    equipo1 = equipo.Equipo(element,each)
+                    jugadores.remove(element)
+                    jugadores.remove(each)
+        if element.posicion == "Sur":
+            for each in jugadores:
+                if each.posicion == "Norte":
+                    equipo1 = equipo.Equipo(element,each)
+                    jugadores.remove(element)
+                    jugadores.remove(each)                    
+    equipo2=equipo.Equipo(jugadores[0],jugadores[1])
+    return equipo1,equipo2
+equipo1,equipo2= repartir_equipos(player1,player2,player3,player4)
+print(equipo1.nombres)
+#equipo1 = equipo.Equipo(player1,player2)
+#equipo2 = equipo.Equipo(player3,player4)
 
-print(equipo2.puntos)
+
     
