@@ -21,8 +21,8 @@ def repartir_fichas():
     return mano1,mano2,mano3,mano4
 mano1,mano2,mano3,mano4=repartir_fichas()
 player1=jugador.Jugador("Jose","Norte",mano1)
-player2=jugador.Jugador("Laura","Este",mano2)
-player3=jugador.Jugador("Fernando","Sur",mano3)
+player2=jugador.Jugador("Laura","Sur",mano2)
+player3=jugador.Jugador("Fernando","Este",mano3)
 player4=jugador.Jugador("Katherine","Oeste",mano4)
 
 def repartir_equipos(player1,player2,player3,player4):
@@ -43,9 +43,59 @@ def repartir_equipos(player1,player2,player3,player4):
     equipo2=equipo.Equipo(jugadores[0],jugadores[1])
     return equipo1,equipo2
 equipo1,equipo2= repartir_equipos(player1,player2,player3,player4)
-print(equipo1.nombres)
-#equipo1 = equipo.Equipo(player1,player2)
-#equipo2 = equipo.Equipo(player3,player4)
+def repartir_turnos(player1,player2,player3,player4):
+    
+    jugadores=[player1,player2,player3,player4]
+    for element in jugadores:
+        if ficha.Ficha(6,6).value in element.mano:
+            element.turno = 1
+            if element.posicion == "Norte":
+                for nino in jugadores:
+                    if nino.posicion == "Oeste":
+                        nino.turno = 2
+                    if nino.posicion == "Sur":
+                        nino.turno = 3
+                    if nino.posicion == "Este":
+                        nino.turno = 4    
+            if element.posicion == "Este":
+                for nino in jugadores:
+                    if nino.posicion == "Oeste":
+                        nino.turno = 3
+                    if nino.posicion == "Sur":
+                        nino.turno = 4
+                    if nino.posicion == "Norte":
+                        nino.turno = 2                   
+            if element.posicion == "Sur":
+                for nino in jugadores:
+                    if nino.posicion == "Oeste":
+                        nino.turno = 4
+                    if nino.posicion == "Norte":
+                        nino.turno = 3
+                    if nino.posicion == "Este":
+                        nino.turno = 2
+            if element.posicion == "Oeste":
+                for nino in jugadores:
+                    if nino.posicion == "Este":
+                        nino.turno = 3
+                    if nino.posicion == "Sur":
+                        nino.turno = 2
+                    if nino.posicion == "Norte":
+                        nino.turno = 4                             
+repartir_turnos(player1,player2,player3,player4)
+print(player1.mano)
+print(str(player1.turno)+ " "+ player1.posicion)
+
+print (player2.mano)
+print(str(player2.turno)+ " "+ player2.posicion)
+
+print(player3.mano)
+print(str(player3.turno)+ " "+ player3.posicion)
+
+print(player4.mano)
+print(str(player4.turno)+ " "+ player4.posicion)
+
+
+
 
 
     

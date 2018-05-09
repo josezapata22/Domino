@@ -3,4 +3,5 @@ class Jugador():
         self.nombre = nombre
         self.posicion = posicion
         self.mano = mano
+        self.turno = None
         
