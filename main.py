@@ -1,3 +1,4 @@
+import operator
 import mesa
 import random
 import ficha
@@ -80,22 +81,101 @@ def repartir_turnos(player1,player2,player3,player4):
                     if nino.posicion == "Sur":
                         nino.turno = 2
                     if nino.posicion == "Norte":
-                        nino.turno = 4                             
-repartir_turnos(player1,player2,player3,player4)
-print(player1.mano)
-print(str(player1.turno)+ " "+ player1.posicion)
+                        nino.turno = 4    
+                        
 
-print (player2.mano)
-print(str(player2.turno)+ " "+ player2.posicion)
+def test():
+    repartir_turnos(player1,player2,player3,player4)
+    
+    print(player1.mano)
+    print(str(player1.turno)+ " "+ player1.posicion)
+    
+    print (player2.mano)
+    print(str(player2.turno)+ " "+ player2.posicion)
+    
+    print(player3.mano)
+    print(str(player3.turno)+ " "+ player3.posicion)
+    
+    print(player4.mano)
+    print(str(player4.turno)+ " "+ player4.posicion)    
 
-print(player3.mano)
-print(str(player3.turno)+ " "+ player3.posicion)
+lista_jugadores=[player1,player2,player3,player4]
+test()
+mesita=mesa.Mesa(equipo1,equipo2)
+lista_jugadores.sort(key=operator.attrgetter('turno'))#funcion del modulo operator, que busca ese atributo en el objeto iterado
+for element in lista_jugadores:
+    print(element.nombre)
+    
+jugada=0
+while len(mesita.juego)<28:
+    
+    if jugada > 3:
+        jugada=0
+    print(mesita.juego)
+    if len(mesita.juego)==0:
+        print("{} Comienza con doble 6!\n".format(lista_jugadores[jugada].nombre))
+        print(lista_jugadores[jugada].mano)
+        elegida=input()
+        indice_ficha= int(elegida) - 1
+        ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+        lista_jugadores[jugada].mano.remove(ficha_elegida)
+        mesita.juego.append(ficha_elegida)
+        jugada+=1
+        print("\n"*10)
+        continue
+    else:
+        for cada_una in lista_jugadores[jugada].mano:
+            if  mesita.juego[-1][-1] == cada_una[0]:
+                print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
+                print(lista_jugadores[jugada].mano)
+                elegida=input()
+                indice_ficha= int(elegida) - 1
+                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                lista_jugadores[jugada].mano.remove(ficha_elegida) 
+                mesita.juego.append(ficha_elegida)
+                jugada+=1
+                break
+            if mesita.juego[-1][-1] == cada_una[1]:
+                print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
+                print(lista_jugadores[jugada].mano)
+                elegida=input()
+                indice_ficha= int(elegida) - 1
+                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                lista_jugadores[jugada].mano.remove(ficha_elegida)
+                mesita.juego.append(ficha_elegida[::-1])
+                jugada+=1
+                break                
+            if  mesita.juego[0][0] == cada_una[1]:
+                print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
+                print(lista_jugadores[jugada].mano)
+                elegida=input()
+                indice_ficha= int(elegida) - 1
+                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                lista_jugadores[jugada].mano.remove(ficha_elegida) 
+                mesita.juego.insert(0,ficha_elegida) 
+                jugada+=1
+                break
+            if mesita.juego[0][0] == cada_una[0]:
+                print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
+                print(lista_jugadores[jugada].mano)
+                elegida=input()
+                indice_ficha= int(elegida) - 1
+                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                lista_jugadores[jugada].mano.remove(ficha_elegida) 
+                mesita.juego.insert(0,ficha_elegida[::-1]) 
+                jugada+=1
+                break                
+    
+    
+    print("\n"*10)
+    
+    
 
-print(player4.mano)
-print(str(player4.turno)+ " "+ player4.posicion)
+
 
 
 
 
 
     
+iij
