@@ -83,7 +83,6 @@ def repartir_turnos(player1,player2,player3,player4):
                     if nino.posicion == "Norte":
                         nino.turno = 4    
                         
-
 def test():
     repartir_turnos(player1,player2,player3,player4)
     
@@ -107,6 +106,15 @@ for element in lista_jugadores:
     print(element.nombre)
     
 jugada=0
+def validar_jugada(mesa_izquierda,mesa_derecha,mano):
+    index=0
+    while index < len(mano):
+        
+        if mesa_izquierda in mano[index] or mesa_derecha in mano[index]:
+            return True
+        if mesa_izquierda not in mano[index] and mesa_derecha not in mano[index] and index == len(mano)-1:
+            return False
+        index+=1
 while len(mesita.juego)<28:
     
     if jugada > 3:
@@ -124,49 +132,55 @@ while len(mesita.juego)<28:
         print("\n"*10)
         continue
     else:
+        
         for cada_una in lista_jugadores[jugada].mano:
-            if  mesita.juego[-1][-1] == cada_una[0]:
-                print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
-                print(lista_jugadores[jugada].mano)
-                elegida=input()
-                indice_ficha= int(elegida) - 1
-                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
-                lista_jugadores[jugada].mano.remove(ficha_elegida) 
-                mesita.juego.append(ficha_elegida)
-                jugada+=1
-                break
-            if mesita.juego[-1][-1] == cada_una[1]:
-                print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
-                print(lista_jugadores[jugada].mano)
-                elegida=input()
-                indice_ficha= int(elegida) - 1
-                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
-                lista_jugadores[jugada].mano.remove(ficha_elegida)
-                mesita.juego.append(ficha_elegida[::-1])
-                jugada+=1
-                break                
-            if  mesita.juego[0][0] == cada_una[1]:
-                print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
-                print(lista_jugadores[jugada].mano)
-                elegida=input()
-                indice_ficha= int(elegida) - 1
-                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
-                lista_jugadores[jugada].mano.remove(ficha_elegida) 
-                mesita.juego.insert(0,ficha_elegida) 
-                jugada+=1
-                break
-            if mesita.juego[0][0] == cada_una[0]:
-                print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
-                print(lista_jugadores[jugada].mano)
-                elegida=input()
-                indice_ficha= int(elegida) - 1
-                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
-                lista_jugadores[jugada].mano.remove(ficha_elegida) 
-                mesita.juego.insert(0,ficha_elegida[::-1]) 
-                jugada+=1
-                break                
+            if validar_jugada(mesita.juego[0][0],mesita.juego[-1][-1],lista_jugadores[jugada].mano):
+                if  mesita.juego[-1][-1] == cada_una[0]:
+                    print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
+                    print(lista_jugadores[jugada].mano)
+                    elegida=input()
+                    indice_ficha= int(elegida) - 1
+                    ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                    lista_jugadores[jugada].mano.remove(ficha_elegida) 
+                    mesita.juego.append(ficha_elegida)
+                    jugada+=1
+                    break
+                if mesita.juego[-1][-1] == cada_una[1]:
+                    print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
+                    print(lista_jugadores[jugada].mano)
+                    elegida=input()
+                    indice_ficha= int(elegida) - 1
+                    ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                    lista_jugadores[jugada].mano.remove(ficha_elegida)
+                    mesita.juego.append(ficha_elegida[::-1])
+                    jugada+=1
+                    break                
+                if  mesita.juego[0][0] == cada_una[1]:
+                    print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
+                    print(lista_jugadores[jugada].mano)
+                    elegida=input()
+                    indice_ficha= int(elegida) - 1
+                    ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                    lista_jugadores[jugada].mano.remove(ficha_elegida) 
+                    mesita.juego.insert(0,ficha_elegida) 
+                    jugada+=1
+                    break
+                if mesita.juego[0][0] == cada_una[0]:
+                    print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
+                    print(lista_jugadores[jugada].mano)
+                    elegida=input()
+                    indice_ficha= int(elegida) - 1
+                    ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                    lista_jugadores[jugada].mano.remove(ficha_elegida) 
+                    mesita.juego.insert(0,ficha_elegida[::-1]) 
+                    jugada+=1
+                    break                
             
-    
+            else:
+                print("{} no tiene fichas disponibles!\n".format(lista_jugadores[jugada].nombre))
+                print(lista_jugadores[jugada].mano)
+                input()
+                jugada+=1
     print("\n"*10)
     
     
