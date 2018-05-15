@@ -115,11 +115,16 @@ def validar_jugada(mesa_izquierda,mesa_derecha,mano):
         if mesa_izquierda not in mano[index] and mesa_derecha not in mano[index] and index == len(mano)-1:
             return False
         index+=1
+def validar_pieza(extremo_izq,extremo_der,pieza):
+    if extremo_izq in pieza or extremo_der in pieza:
+        return True
+    return False
 def validar_doble_6(pieza):
     if pieza[0] == 6 and pieza[1] == 6 :
         return True
     return False
 while len(mesita.juego)<28:
+    
     
     if jugada > 3:
         jugada=0
@@ -134,6 +139,7 @@ while len(mesita.juego)<28:
             while validar_doble_6(ficha_elegida) == False:
                 print("Esta ficha no es el doble 6, por favor seleccione la ficha correcta!\n")
                 print(mesita.juego)
+                print("{}:".format(lista_jugadores[jugada].nombre))
                 print(lista_jugadores[jugada].mano)
                 elegida=input()
                 indice_ficha= int(elegida) - 1
@@ -153,8 +159,20 @@ while len(mesita.juego)<28:
                     elegida=input()
                     indice_ficha= int(elegida) - 1
                     ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                    if not validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida):
+                        while validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida) == False:
+                            print("Esta ficha no es valida, porfavor seleccione otra pieza\n")
+                            print(mesita.juego)
+                            print("{}:".format(lista_jugadores[jugada].nombre))
+                            print(lista_jugadores[jugada].mano)
+                            elegida=input()
+                            indice_ficha= int(elegida) - 1
+                            ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                        
                     lista_jugadores[jugada].mano.remove(ficha_elegida) 
                     mesita.juego.append(ficha_elegida)
+                    if len(lista_jugadores[jugada].mano) == 0:
+                        print("{} Ha ganado la partida!, no tiene mas fichas!\n")
+                        
                     jugada+=1
                     break
                 if mesita.juego[-1][-1] == cada_una[1]:
@@ -163,6 +181,15 @@ while len(mesita.juego)<28:
                     elegida=input()
                     indice_ficha= int(elegida) - 1
                     ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                    if not validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida):
+                        while validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida) ==  False:
+                            print("Esta ficha no es valida, porfavor seleccione otra pieza\n")
+                            print(mesita.juego)
+                            print("{}:".format(lista_jugadores[jugada].nombre))
+                            print(lista_jugadores[jugada].mano)                            
+                            elegida=input()
+                            indice_ficha= int(elegida) - 1
+                            ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                      
                     lista_jugadores[jugada].mano.remove(ficha_elegida)
                     mesita.juego.append(ficha_elegida[::-1])
                     jugada+=1
@@ -173,6 +200,15 @@ while len(mesita.juego)<28:
                     elegida=input()
                     indice_ficha= int(elegida) - 1
                     ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                    if not validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida):
+                        while validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida) == False:
+                            print("Esta ficha no es valida, porfavor seleccione otra pieza\n")
+                            print(mesita.juego)
+                            print("{}:".format(lista_jugadores[jugada].nombre))
+                            print(lista_jugadores[jugada].mano)                            
+                            elegida=input()
+                            indice_ficha= int(elegida) - 1
+                            ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                      
                     lista_jugadores[jugada].mano.remove(ficha_elegida) 
                     mesita.juego.insert(0,ficha_elegida) 
                     jugada+=1
@@ -183,6 +219,15 @@ while len(mesita.juego)<28:
                     elegida=input()
                     indice_ficha= int(elegida) - 1
                     ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                    if not validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida):
+                        while validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida) == False:
+                            print("Esta ficha no es valida, porfavor seleccione otra pieza\n")
+                            print(mesita.juego)
+                            print("{}:".format(lista_jugadores[jugada].nombre))
+                            print(lista_jugadores[jugada].mano)                            
+                            elegida=input()
+                            indice_ficha= int(elegida) - 1
+                            ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                      
                     lista_jugadores[jugada].mano.remove(ficha_elegida) 
                     mesita.juego.insert(0,ficha_elegida[::-1]) 
                     jugada+=1
@@ -195,10 +240,13 @@ while len(mesita.juego)<28:
                 jugada+=1
     print("\n"*10)
     
-    
 
-
-
+def sumar_puntos(lista_jugadores):
+    suma=0
+    for element in range(0,len(lista_jugadores)):
+        for pieza in lista_jugadores[element].mano:
+            suma+= pieza[0]+pieza[1]
+    return suma
 
 
 
