@@ -165,7 +165,7 @@ while len(mesita.juego)<28:
                 mesita.juego.insert(0,ficha_elegida[::-1]) 
                 jugada+=1
                 break                
-    
+            
     
     print("\n"*10)
     
@@ -178,4 +178,3 @@ while len(mesita.juego)<28:
 
 
     
-iij
