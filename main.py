@@ -115,6 +115,10 @@ def validar_jugada(mesa_izquierda,mesa_derecha,mano):
         if mesa_izquierda not in mano[index] and mesa_derecha not in mano[index] and index == len(mano)-1:
             return False
         index+=1
+def validar_doble_6(pieza):
+    if pieza[0] == 6 and pieza[1] == 6 :
+        return True
+    return False
 while len(mesita.juego)<28:
     
     if jugada > 3:
@@ -126,6 +130,14 @@ while len(mesita.juego)<28:
         elegida=input()
         indice_ficha= int(elegida) - 1
         ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+        if not validar_doble_6(ficha_elegida):
+            while validar_doble_6(ficha_elegida) == False:
+                print("Esta ficha no es el doble 6, por favor seleccione la ficha correcta!\n")
+                print(mesita.juego)
+                print(lista_jugadores[jugada].mano)
+                elegida=input()
+                indice_ficha= int(elegida) - 1
+                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                
         lista_jugadores[jugada].mano.remove(ficha_elegida)
         mesita.juego.append(ficha_elegida)
         jugada+=1
