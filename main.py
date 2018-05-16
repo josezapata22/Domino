@@ -4,6 +4,39 @@ import random
 import ficha
 import equipo
 import jugador
+def contar_fichas_totales(ficha_en_mesa):
+    if ficha_en_mesa[0] == 0 or ficha_en_mesa[1] == 0:
+        mesita.f0+=1
+    if ficha_en_mesa[0] == 1 or ficha_en_mesa[1] == 1:
+        mesita.f1+=1        
+    if ficha_en_mesa[0] == 2 or ficha_en_mesa[1] == 2:
+        mesita.f2+=1
+    if ficha_en_mesa[0] == 3 or ficha_en_mesa[1] == 3:
+        mesita.f3+=1  
+    if ficha_en_mesa[0] == 4 or ficha_en_mesa[1] == 4:
+        mesita.f4+=1
+    if ficha_en_mesa[0] == 5 or ficha_en_mesa[1] == 5:
+        mesita.f5+=1  
+    if ficha_en_mesa[0] == 6 or ficha_en_mesa[1] == 6:
+        mesita.f6+=1                
+def contar_fichas_tranque(trancador,siguiente):
+    total_trancador = 0
+    total_siguiente = 0
+    for each in trancador.mano:
+        total_trancador += each.value[0] + each.value[1]
+    for each in siguiente.mano:
+        total_siguiente += each.value[0] + each.value[1]
+    if total_trancador <= total_siguiente:
+        return trancador
+    else:
+        return siguiente
+def sumar_puntos(lista_jugadores):
+    suma=0
+    for element in range(0,len(lista_jugadores)):
+        for pieza in lista_jugadores[element].mano:
+            suma+= pieza.value[0]+pieza.value[1]
+    return suma
+
 def crear_fichas():
     caja_de_ficha=[]
     for num1 in range (0,7):
@@ -105,6 +138,7 @@ lista_jugadores.sort(key=operator.attrgetter('turno'))#funcion del modulo operat
 for element in lista_jugadores:
     print(element.nombre)
     
+
 jugada=0
 def validar_jugada(mesa_izquierda,mesa_derecha,mano):
     index=0
@@ -124,11 +158,11 @@ def validar_doble_6(pieza):
         return True
     return False
 ganador=False
-while len(mesita.juego)<28 and ganador==False:
-    
+while ganador==False:
     
     if jugada > 3:
         jugada=0
+     
     print(mesita.juego)
     if len(mesita.juego)==0:
         print("{} Comienza con doble 6!\n".format(lista_jugadores[jugada].nombre))
@@ -144,16 +178,26 @@ while len(mesita.juego)<28 and ganador==False:
                 print(lista_jugadores[jugada].mano)
                 elegida=input()
                 indice_ficha= int(elegida) - 1
-                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                
+                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                
+        contar_fichas_totales(ficha_elegida)
         lista_jugadores[jugada].mano.remove(ficha_elegida)
         mesita.juego.append(ficha_elegida)
         jugada+=1
         print("\n"*10)
         continue
+    if (mesita.juego[0][0] == mesita.juego[-1][-1]) and (mesita.f0 == 6 or mesita.f1 == 6 or mesita.f2 == 6 or mesita.f3 == 6 or mesita.f4 == 6 or mesita.f5 == 6 or mesita.f6 == 6):
+        input("{} Ha trancado el juego!".format(lista_jugadores[jugada].nombre))
+        ganador= contar_fichas_tranque(lista_jugadores[jugada-1],lista_jugadores[jugada])
+        input ("El ganador del juego es: {} !!!")
+        break       
+    
+    
     else:
         
         for cada_una in lista_jugadores[jugada].mano:
             if validar_jugada(mesita.juego[0][0],mesita.juego[-1][-1],lista_jugadores[jugada].mano):
+                    
                 if  mesita.juego[-1][-1] == cada_una[0]:
                     print("{} Seleccione su ficha\n".format(lista_jugadores[jugada].nombre))
                     print(lista_jugadores[jugada].mano)
@@ -168,9 +212,11 @@ while len(mesita.juego)<28 and ganador==False:
                             print(lista_jugadores[jugada].mano)
                             elegida=input()
                             indice_ficha= int(elegida) - 1
-                            ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                        
+                            ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                    
+                    contar_fichas_totales(ficha_elegida)
                     lista_jugadores[jugada].mano.remove(ficha_elegida) 
-                    mesita.juego.append(ficha_elegida)
+                    mesita.juego.append(ficha_elegida)                                                        
+                    
                     if len(lista_jugadores[jugada].mano) == 0:
                         print("{} Ha ganado el juego!,ya termino todas sus fichas!\n".format(lista_jugadores[jugada].nombre))
                         ganador=True
@@ -191,6 +237,7 @@ while len(mesita.juego)<28 and ganador==False:
                             elegida=input()
                             indice_ficha= int(elegida) - 1
                             ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                      
+                    contar_fichas_totales(ficha_elegida)
                     lista_jugadores[jugada].mano.remove(ficha_elegida)
                     mesita.juego.append(ficha_elegida[::-1])
                     if len(lista_jugadores[jugada].mano) == 0:
@@ -213,6 +260,8 @@ while len(mesita.juego)<28 and ganador==False:
                             elegida=input()
                             indice_ficha= int(elegida) - 1
                             ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                      
+
+                    contar_fichas_totales(ficha_elegida)
                     lista_jugadores[jugada].mano.remove(ficha_elegida) 
                     mesita.juego.insert(0,ficha_elegida) 
                     if len(lista_jugadores[jugada].mano) == 0:
@@ -235,6 +284,7 @@ while len(mesita.juego)<28 and ganador==False:
                             elegida=input()
                             indice_ficha= int(elegida) - 1
                             ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                      
+                    contar_fichas_totales(ficha_elegida)
                     lista_jugadores[jugada].mano.remove(ficha_elegida) 
                     mesita.juego.insert(0,ficha_elegida[::-1]) 
                     if len(lista_jugadores[jugada].mano) == 0:
@@ -248,15 +298,9 @@ while len(mesita.juego)<28 and ganador==False:
                 print(lista_jugadores[jugada].mano)
                 input()
                 jugada+=1
+                break
     print("\n"*10)
     
-
-def sumar_puntos(lista_jugadores):
-    suma=0
-    for element in range(0,len(lista_jugadores)):
-        for pieza in lista_jugadores[element].mano:
-            suma+= pieza.value[0]+pieza.value[1]
-    return suma
 
 
 
