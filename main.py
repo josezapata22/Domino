@@ -123,7 +123,8 @@ def validar_doble_6(pieza):
     if pieza[0] == 6 and pieza[1] == 6 :
         return True
     return False
-while len(mesita.juego)<28:
+ganador=False
+while len(mesita.juego)<28 and ganador==False:
     
     
     if jugada > 3:
@@ -171,8 +172,8 @@ while len(mesita.juego)<28:
                     lista_jugadores[jugada].mano.remove(ficha_elegida) 
                     mesita.juego.append(ficha_elegida)
                     if len(lista_jugadores[jugada].mano) == 0:
-                        print("{} Ha ganado la partida!, no tiene mas fichas!\n")
-                        
+                        print("{} Ha ganado el juego!,ya termino todas sus fichas!\n".format(lista_jugadores[jugada].nombre))
+                        ganador=True
                     jugada+=1
                     break
                 if mesita.juego[-1][-1] == cada_una[1]:
@@ -192,6 +193,9 @@ while len(mesita.juego)<28:
                             ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                      
                     lista_jugadores[jugada].mano.remove(ficha_elegida)
                     mesita.juego.append(ficha_elegida[::-1])
+                    if len(lista_jugadores[jugada].mano) == 0:
+                        print("{} Ha ganado el juego!,ya termino todas sus fichas!\n".format(lista_jugadores[jugada].nombre))
+                        ganador=True                    
                     jugada+=1
                     break                
                 if  mesita.juego[0][0] == cada_una[1]:
@@ -211,6 +215,9 @@ while len(mesita.juego)<28:
                             ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                      
                     lista_jugadores[jugada].mano.remove(ficha_elegida) 
                     mesita.juego.insert(0,ficha_elegida) 
+                    if len(lista_jugadores[jugada].mano) == 0:
+                        print("{} Ha ganado el juego!,ya termino todas sus fichas!\n".format(lista_jugadores[jugada].nombre))
+                        ganador=True                    
                     jugada+=1
                     break
                 if mesita.juego[0][0] == cada_una[0]:
@@ -230,6 +237,9 @@ while len(mesita.juego)<28:
                             ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                      
                     lista_jugadores[jugada].mano.remove(ficha_elegida) 
                     mesita.juego.insert(0,ficha_elegida[::-1]) 
+                    if len(lista_jugadores[jugada].mano) == 0:
+                        print("{} Ha ganado el juego!,ya termino todas sus fichas!\n".format(lista_jugadores[jugada].nombre))
+                        ganador=True                    
                     jugada+=1
                     break                
             
@@ -245,7 +255,7 @@ def sumar_puntos(lista_jugadores):
     suma=0
     for element in range(0,len(lista_jugadores)):
         for pieza in lista_jugadores[element].mano:
-            suma+= pieza[0]+pieza[1]
+            suma+= pieza.value[0]+pieza.value[1]
     return suma
 
 
