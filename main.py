@@ -186,7 +186,7 @@ while ganador==False:
         jugada+=1
         print("\n"*10)
         continue
-    if (mesita.juego[0][0] == mesita.juego[-1][-1]) and mesita.juego[0][0] == 0 and mesita.f0== 7:
+    if (mesita.juego[0][0] == mesita.juego[-1][-1]) and mesita.juego[0][0] == 0 and mesita.f0 == 7:
         input("{} Ha trancado el juego!".format(lista_jugadores[jugada].nombre))
         ganador= contar_fichas_tranque(lista_jugadores[jugada-1],lista_jugadores[jugada])
         input ("El ganador del juego es: {} !!!".format(ganador.nombre))
@@ -250,6 +250,19 @@ while ganador==False:
                 if len(lista_jugadores[jugada].mano) == 0:
                     print("{} Ha ganado el juego!,ya termino todas sus fichas!\n".format(lista_jugadores[jugada].nombre))
                     ganador=True
+                jugada+=1
+                print("\n"*10)
+                continue
+            if validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida) and (ficha_elegida[0] == ficha_elegida[1]):
+                if mesita.juego[0][0] == ficha_elegida[0]:
+                    mesita.juego.insert(0,ficha_elegida)
+                if mesita.juego[-1][-1] == ficha_elegida[0]:
+                    mesita.juego.append(ficha_elegida)
+                contar_fichas_totales(ficha_elegida)
+                lista_jugadores[jugada].mano.remove(ficha_elegida) 
+                if len(lista_jugadores[jugada].mano) == 0:
+                    print("{} Ha ganado el juego!,ya termino todas sus fichas!\n".format(lista_jugadores[jugada].nombre))
+                    ganador=True                
                 jugada+=1
                 print("\n"*10)
                 continue
@@ -331,7 +344,53 @@ while ganador==False:
                 jugada+=1
                 print("\n"*10)
                 continue                
-        
+            if mesita.juego[-1][-1] == ficha_elegida[0]:
+                if not validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida):
+                    while validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida) == False:
+                        print("Esta ficha no es valida, porfavor seleccione otra pieza\n")
+                        print(mesita.juego)
+                        print("{}:".format(lista_jugadores[jugada].nombre))
+                        print(lista_jugadores[jugada].mano)                            
+                        elegida=input()
+                        indice_ficha= int(elegida) - 1
+                        ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                      
+                contar_fichas_totales(ficha_elegida)
+                lista_jugadores[jugada].mano.remove(ficha_elegida) 
+                mesita.juego.append(ficha_elegida) 
+                if len(lista_jugadores[jugada].mano) == 0:
+                    print("{} Ha ganado el juego!,ya termino todas sus fichas!\n".format(lista_jugadores[jugada].nombre))
+                    ganador=True                    
+                jugada+=1
+                print("\n"*10)
+                continue 
+            if mesita.juego[-1][-1] == ficha_elegida[-1]:
+                if not validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida):
+                    while validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida) == False:
+                        print("Esta ficha no es valida, porfavor seleccione otra pieza\n")
+                        print(mesita.juego)
+                        print("{}:".format(lista_jugadores[jugada].nombre))
+                        print(lista_jugadores[jugada].mano)                            
+                        elegida=input()
+                        indice_ficha= int(elegida) - 1
+                        ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                      
+                contar_fichas_totales(ficha_elegida)
+                lista_jugadores[jugada].mano.remove(ficha_elegida) 
+                mesita.juego.append(ficha_elegida[::-1]) 
+                if len(lista_jugadores[jugada].mano) == 0:
+                    print("{} Ha ganado el juego!,ya termino todas sus fichas!\n".format(lista_jugadores[jugada].nombre))
+                    ganador=True                    
+                jugada+=1
+                print("\n"*10)
+                continue                          
+            else:
+                while validar_pieza(mesita.juego[0][0],mesita.juego[-1][-1],ficha_elegida) == False:
+                    print("Esta ficha no es valida, porfavor seleccione otra pieza")
+                    print(mesita.juego)
+                    print("{}:".format(lista_jugadores[jugada].nombre))
+                    print(lista_jugadores[jugada].mano)                            
+                    elegida=input()
+                    indice_ficha= int(elegida) - 1
+                    ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]                
         else:
             print("{} no tiene fichas disponibles!\n".format(lista_jugadores[jugada].nombre))
             print(lista_jugadores[jugada].mano)
