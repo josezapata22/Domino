@@ -4,6 +4,7 @@ class Jugador():
         self.posicion = posicion
         self.mano = mano
         self.turno = None
+        self.puntos=0
     @property
     def dar_turno(self):
         return self.turno

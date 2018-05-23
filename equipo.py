@@ -6,4 +6,4 @@ class Equipo():
         self.puntos  = 0
     @property
     def nombres(self):
-        return self.player1.nombre + " " + self.player2.nombre
+        return self.player1.nombre + " y " + self.player2.nombre
