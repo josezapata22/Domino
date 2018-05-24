@@ -172,8 +172,7 @@ def crear_jugadores():
 def game():
     partidas=0      
     player1,player2,player3,player4=crear_jugadores()
-    lista_jugadores=[player1,player2,player3,player4]
-    
+    lista_jugadores=[player1,player2,player3,player4]    
     repartir_turnos(player1,player2,player3,player4)
     equipo1,equipo2= repartir_equipos(player1,player2,player3,player4)
     mesita=mesa.Mesa(equipo1,equipo2)
@@ -205,7 +204,8 @@ def game():
         lista_jugadores=[player1,player2,player3,player4]
         repartir_turnos(player1,player2,player3,player4)
         lista_jugadores.sort(key=operator.attrgetter('turno'))
-        jugada=0
+        if partidas == 0:
+            jugada=0
         ganadora=False
         
         
@@ -216,16 +216,16 @@ def game():
             if equipo2.puntos >= 200:
                 input("El equipo ganador es el de {} !!!\n".format(equipo2.nombres))
                 break
-        if not  (equipo1.puntos == 0 and equipo1.puntos == equipo2.puntos):#recordar ponerle el not pa que no salga en el eprimer turno
+        if not  jugada == 0:#recordar ponerle el not pa que no salga en el eprimer turno
             input("Equipo de {} , {} puntos!\nEquipo de {} , {} puntos!!!\n".format(equipo1.nombres,equipo1.puntos,equipo2.nombres,equipo2.puntos))
-            input("\n"*10)
+            variable_pa_borrar=os.system('cls')
         while ganadora==False:
             
             if jugada > 3:
                 jugada=0
              
             print(mesita.juego)
-            if len(mesita.juego)==0:
+            if len(mesita.juego)==0 and partidas == 0:
                 print("{} Comienza con doble 6!\n".format(lista_jugadores[jugada].nombre))
                 print(lista_jugadores[jugada].mano)
                 elegida=input()
@@ -254,6 +254,20 @@ def game():
                 jugada+=1
                 variable_pa_borrar=os.system('cls')
                 continue
+            if len(mesita.juego)==0 and partidas >0:
+                jugada-=2
+                print("{} Comienza con cualquier ficha ya que ganaste la pasada!!!\n".format(lista_jugadores[jugada].nombre))
+                print(lista_jugadores[jugada].mano)
+                elegida=input() 
+                indice_ficha= int(elegida) - 1
+                ficha_elegida=lista_jugadores[jugada].mano[indice_ficha]
+                contar_fichas_totales(ficha_elegida,mesita)
+                lista_jugadores[jugada].mano.remove(ficha_elegida)
+                mesita.juego.append(ficha_elegida)
+                jugada+=1
+                variable_pa_borrar=os.system('cls')
+                continue                
+                
             if (mesita.juego[0][0] == mesita.juego[-1][-1]) and mesita.juego[0][0] == 0 and mesita.f0 == 7:
                 input("{} Ha trancado el juego!".format(lista_jugadores[jugada-1].nombre))
                 ganador= contar_fichas_tranque(lista_jugadores[jugada-1],lista_jugadores[jugada],lista_jugadores)
@@ -332,6 +346,7 @@ def game():
                             input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
                             ganadora=True  
                             lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            
                             break
                         jugada+=1
                         variable_pa_borrar=os.system('cls')
@@ -347,6 +362,7 @@ def game():
                             input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
                             ganadora=True  
                             lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            
                             break
                         jugada+=1
                         variable_pa_borrar=os.system('cls')
@@ -369,6 +385,7 @@ def game():
                             input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
                             ganadora=True  
                             lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            
                             break
                         jugada+=1
                         variable_pa_borrar=os.system('cls')
@@ -390,6 +407,7 @@ def game():
                             input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
                             ganadora=True  
                             lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            
                             break
                         jugada+=1
                         variable_pa_borrar=os.system('cls')
@@ -412,6 +430,7 @@ def game():
                             input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
                             ganadora=True  
                             lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            
                             break
                         jugada+=1
                         variable_pa_borrar=os.system('cls')
@@ -433,6 +452,7 @@ def game():
                             input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
                             ganadora=True  
                             lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            
                             break
                         jugada+=1
                         variable_pa_borrar=os.system('cls')
@@ -454,6 +474,7 @@ def game():
                             input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
                             ganadora=True  
                             lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            
                             break
                         jugada+=1
                         variable_pa_borrar=os.system('cls')
@@ -475,6 +496,7 @@ def game():
                             input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
                             ganadora=True  
                             lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            
                             break
                         jugada+=1
                         variable_pa_borrar=os.system('cls')
