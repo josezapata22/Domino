@@ -29,16 +29,19 @@ def contar_fichas_tranque(trancador,siguiente,lista_jugadores):
     for each in siguiente.mano:
         total_siguiente += each[0] + each[1]
     if total_trancador <= total_siguiente:
-        trancador.puntos=sumar_puntos(lista_jugadores)
-        return trancador
+        trancador.puntos=sumar_puntos(lista_jugadores,capicua)
+        return trancador,trancador
     else:
-        siguiente.puntos=sumar_puntos(lista_jugadores)
+        siguiente.puntos=sumar_puntos(lista_jugadores,capicua)
         return siguiente
-def sumar_puntos(lista_jugadores):
+def sumar_puntos(lista_jugadores,capicua):
     suma=0
-    for element in range(0,len(lista_jugadores)):
-        for pieza in lista_jugadores[element].mano:
-            suma+= pieza[0]+pieza[1]
+    for element in lista_jugadores:
+        for fichas in element.mano:
+            suma += fichas[1]+fichas[0]
+              
+    if capicua == True:
+        suma+=25
     return suma
 
 def crear_fichas():
@@ -177,9 +180,10 @@ def game():
     equipo1,equipo2= repartir_equipos(player1,player2,player3,player4)
     mesita=mesa.Mesa(equipo1,equipo2)
     lista_jugadores.sort(key=operator.attrgetter('turno'))#funcion del modulo operator, que busca ese atributo en el objeto iterado
-    while equipo1.puntos <= 200 or equipo2.puntos <= 200:
-        equipo1.puntos = equipo1.player1.puntos + equipo1.player2.puntos
-        equipo2.puntos = equipo2.player1.puntos + equipo2.player2.puntos
+    while equipo1.puntos <= 200 and equipo2.puntos <= 200:
+        capicua=False
+        equipo1.puntos += equipo1.player1.puntos + equipo1.player2.puntos
+        equipo2.puntos += equipo2.player1.puntos + equipo2.player2.puntos
         player1.puntos = 0
         player2.puntos = 0
         player3.puntos = 0
@@ -201,8 +205,9 @@ def game():
         player2.mano = mano2
         player3.mano = mano3
         player4.mano = mano4         
-        lista_jugadores=[player1,player2,player3,player4]
-        repartir_turnos(player1,player2,player3,player4)
+        #lista_jugadores=[player1,player2,player3,player4]
+        if partidas == 0:
+            repartir_turnos(player1,player2,player3,player4)
         lista_jugadores.sort(key=operator.attrgetter('turno'))
         if partidas == 0:
             jugada=0
@@ -216,7 +221,7 @@ def game():
             if equipo2.puntos >= 200:
                 input("El equipo ganador es el de {} !!!\n".format(equipo2.nombres))
                 break
-        if not  jugada == 0:#recordar ponerle el not pa que no salga en el eprimer turno
+        if not  partidas == 0:#recordar ponerle el not pa que no salga en el eprimer turno
             input("Equipo de {} , {} puntos!\nEquipo de {} , {} puntos!!!\n".format(equipo1.nombres,equipo1.puntos,equipo2.nombres,equipo2.puntos))
             variable_pa_borrar=os.system('cls')
         while ganadora==False:
@@ -255,7 +260,6 @@ def game():
                 variable_pa_borrar=os.system('cls')
                 continue
             if len(mesita.juego)==0 and partidas >0:
-                jugada-=2
                 print("{} Comienza con cualquier ficha ya que ganaste la pasada!!!\n".format(lista_jugadores[jugada].nombre))
                 print(lista_jugadores[jugada].mano)
                 elegida=input() 
@@ -269,39 +273,39 @@ def game():
                 continue                
                 
             if (mesita.juego[0][0] == mesita.juego[-1][-1]) and mesita.juego[0][0] == 0 and mesita.f0 == 7:
-                input("{} Ha trancado el juego!".format(lista_jugadores[jugada-1].nombre))
+                input("{} Ha trancado el juego!\n".format(lista_jugadores[jugada-1].nombre))
                 ganador= contar_fichas_tranque(lista_jugadores[jugada-1],lista_jugadores[jugada],lista_jugadores)
                 input ("El ganador del juego es: {} !!!\nSe lleva {} puntos !!!".format(ganador.nombre,sumar_puntos(lista_jugadores)))
                 ganadora=True
                 break
             if (mesita.juego[0][0] == mesita.juego[-1][-1]) and mesita.juego[0][0] == 1 and mesita.f1 == 7:
-                input("{} Ha trancado el juego!".format(lista_jugadores[jugada-1].nombre))
+                input("{} Ha trancado el juego!\n".format(lista_jugadores[jugada-1].nombre))
                 ganador= contar_fichas_tranque(lista_jugadores[jugada-1],lista_jugadores[jugada],lista_jugadores)
                 input ("El ganador del juego es: {} !!!\nSe lleva {} puntos !!!".format(ganador.nombre,sumar_puntos(lista_jugadores)))
                 ganadora=True
                 break     
             if (mesita.juego[0][0] == mesita.juego[-1][-1]) and mesita.juego[0][0] == 2 and mesita.f2 == 7:
-                input("{} Ha trancado el juego!".format(lista_jugadores[jugada-1].nombre))
+                input("{} Ha trancado el juego!\n".format(lista_jugadores[jugada-1].nombre))
                 ganador= contar_fichas_tranque(lista_jugadores[jugada-1],lista_jugadores[jugada],lista_jugadores)
                 input ("El ganador del juego es: {} !!!\nSe lleva {} puntos !!!".format(ganador.nombre,sumar_puntos(lista_jugadores)))
                 break     
             if (mesita.juego[0][0] == mesita.juego[-1][-1]) and mesita.juego[0][0] == 3 and mesita.f3 == 7:
-                input("{} Ha trancado el juego!".format(lista_jugadores[jugada-1].nombre))
+                input("{} Ha trancado el juego!\n".format(lista_jugadores[jugada-1].nombre))
                 ganador= contar_fichas_tranque(lista_jugadores[jugada-1],lista_jugadores[jugada],lista_jugadores)
                 input ("El ganador del juego es: {} !!!\nSe lleva {} puntos !!!".format(ganador.nombre,sumar_puntos(lista_jugadores)))
                 break     
             if (mesita.juego[0][0] == mesita.juego[-1][-1]) and mesita.juego[0][0] == 4 and mesita.f4 == 7:
-                input("{} Ha trancado el juego!".format(lista_jugadores[jugada-1].nombre))
+                input("{} Ha trancado el juego!\n".format(lista_jugadores[jugada-1].nombre))
                 ganador= contar_fichas_tranque(lista_jugadores[jugada-1],lista_jugadores[jugada],lista_jugadores)
                 input ("El ganador del juego es: {} !!!\nSe lleva {} puntos !!!".format(ganador.nombre,sumar_puntos(lista_jugadores)))
                 break     
             if (mesita.juego[0][0] == mesita.juego[-1][-1]) and mesita.juego[0][0] == 5 and mesita.f5 == 7:
-                input("{} Ha trancado el juego!".format(lista_jugadores[jugada-1].nombre))
+                input("{} Ha trancado el juego!\n".format(lista_jugadores[jugada-1].nombre))
                 ganador= contar_fichas_tranque(lista_jugadores[jugada-1],lista_jugadores[jugada],lista_jugadores)
                 input ("El ganador del juego es: {} !!!\nSe lleva {} puntos !!!".format(ganador.nombre,sumar_puntos(lista_jugadores)))
                 break     
             if (mesita.juego[0][0] == mesita.juego[-1][-1]) and mesita.juego[0][0] == 6 and mesita.f6 == 7:
-                input("{} Ha trancado el juego!".format(lista_jugadores[jugada-1].nombre))
+                input("{} Ha trancado el juego!\n".format(lista_jugadores[jugada-1].nombre))
                 ganador= contar_fichas_tranque(lista_jugadores[jugada-1],lista_jugadores[jugada],lista_jugadores)
                 input ("El ganador del juego es: {} !!!\nSe lleva {} puntos !!!".format(ganador.nombre,sumar_puntos(lista_jugadores)))
                 break         
@@ -343,9 +347,12 @@ def game():
                         contar_fichas_totales(ficha_elegida,mesita)
                         lista_jugadores[jugada].mano.remove(ficha_elegida)                                                                                                
                         if len(lista_jugadores[jugada].mano) == 0:
-                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
+                            if (ficha_elegida[0] == mesita.juego[-1] and ficha_elegida[-1] == mesita.juego[0]) or (ficha_elegida[-1] == mesita.juego[-1] and ficha_elegida[0] == mesita.juego[0]):
+                                input("Capicua!!! 25 puntos extra!!!\n")
+                                capicua=True
+                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores,capicua)))
                             ganadora=True  
-                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores,capicua)
                             
                             break
                         jugada+=1
@@ -359,9 +366,12 @@ def game():
                         contar_fichas_totales(ficha_elegida,mesita)
                         lista_jugadores[jugada].mano.remove(ficha_elegida) 
                         if len(lista_jugadores[jugada].mano) == 0:
-                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
+                            if (ficha_elegida[0] == mesita.juego[-1] and ficha_elegida[-1] == mesita.juego[0]) or (ficha_elegida[-1] == mesita.juego[-1] and ficha_elegida[0] == mesita.juego[0]):
+                                input("Capicua!!! 25 puntos extra!!!\n")
+                                capicua=True                            
+                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores,capicua)))
                             ganadora=True  
-                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores,capicua)
                             
                             break
                         jugada+=1
@@ -382,9 +392,12 @@ def game():
                         contar_fichas_totales(ficha_elegida,mesita)
                         lista_jugadores[jugada].mano.remove(ficha_elegida)                                                                                                
                         if len(lista_jugadores[jugada].mano) == 0:
-                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
+                            if (ficha_elegida[0] == mesita.juego[-1] and ficha_elegida[-1] == mesita.juego[0]) or (ficha_elegida[-1] == mesita.juego[-1] and ficha_elegida[0] == mesita.juego[0]):
+                                input("Capicua!!! 25 puntos extra!!!\n")
+                                capicua=True                            
+                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores,capicua)))
                             ganadora=True  
-                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores,capicua)
                             
                             break
                         jugada+=1
@@ -404,9 +417,12 @@ def game():
                         lista_jugadores[jugada].mano.remove(ficha_elegida)
                         mesita.juego.append(ficha_elegida[::-1])
                         if len(lista_jugadores[jugada].mano) == 0:
-                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
+                            if (ficha_elegida[0] == mesita.juego[-1] and ficha_elegida[-1] == mesita.juego[0]) or (ficha_elegida[-1] == mesita.juego[-1] and ficha_elegida[0] == mesita.juego[0]):
+                                input("Capicua!!! 25 puntos extra!!!\n")
+                                capicua=True                            
+                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores,capicua)))
                             ganadora=True  
-                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores,capicua)
                             
                             break
                         jugada+=1
@@ -427,9 +443,12 @@ def game():
                         lista_jugadores[jugada].mano.remove(ficha_elegida) 
                         mesita.juego.insert(0,ficha_elegida) 
                         if len(lista_jugadores[jugada].mano) == 0:
-                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
+                            if (ficha_elegida[0] == mesita.juego[-1] and ficha_elegida[-1] == mesita.juego[0]) or (ficha_elegida[-1] == mesita.juego[-1] and ficha_elegida[0] == mesita.juego[0]):
+                                input("Capicua!!! 25 puntos extra!!!\n")
+                                capicua=True                            
+                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores,capicua)))
                             ganadora=True  
-                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores,capicua)
                             
                             break
                         jugada+=1
@@ -449,9 +468,12 @@ def game():
                         lista_jugadores[jugada].mano.remove(ficha_elegida) 
                         mesita.juego.insert(0,ficha_elegida[::-1]) 
                         if len(lista_jugadores[jugada].mano) == 0:
-                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
+                            if (ficha_elegida[0] == mesita.juego[-1] and ficha_elegida[-1] == mesita.juego[0]) or (ficha_elegida[-1] == mesita.juego[-1] and ficha_elegida[0] == mesita.juego[0]):
+                                input("Capicua!!! 25 puntos extra!!!\n")
+                                capicua=True                            
+                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores,capicua)))
                             ganadora=True  
-                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores,capicua)
                             
                             break
                         jugada+=1
@@ -471,9 +493,12 @@ def game():
                         lista_jugadores[jugada].mano.remove(ficha_elegida) 
                         mesita.juego.append(ficha_elegida) 
                         if len(lista_jugadores[jugada].mano) == 0:
-                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
+                            if (ficha_elegida[0] == mesita.juego[-1] and ficha_elegida[-1] == mesita.juego[0]) or (ficha_elegida[-1] == mesita.juego[-1] and ficha_elegida[0] == mesita.juego[0]):
+                                input("Capicua!!! 25 puntos extra!!!\n")
+                                capicua=True                            
+                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores,capicua)))
                             ganadora=True  
-                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores,capicua)
                             
                             break
                         jugada+=1
@@ -493,9 +518,12 @@ def game():
                         lista_jugadores[jugada].mano.remove(ficha_elegida) 
                         mesita.juego.append(ficha_elegida[::-1]) 
                         if len(lista_jugadores[jugada].mano) == 0:
-                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores)))
+                            if (ficha_elegida[0] == mesita.juego[-1] and ficha_elegida[-1] == mesita.juego[0]) or (ficha_elegida[-1] == mesita.juego[-1] and ficha_elegida[0] == mesita.juego[0]):
+                                input("Capicua!!! 25 puntos extra!!!\n")
+                                capicua=True                            
+                            input("{} Ha ganado el juego!,ya termino todas sus fichas!\nSe lleva {} puntos !!!".format(lista_jugadores[jugada].nombre,sumar_puntos(lista_jugadores,capicua)))
                             ganadora=True  
-                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores)
+                            lista_jugadores[jugada].puntos=sumar_puntos(lista_jugadores,capicua)
                             
                             break
                         jugada+=1
